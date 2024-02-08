@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+   <h1>{% block title %} Welcome to EPS! {% endblock %}</h1>
+    <hr>
+    <a href="{{ url_for('create_prescription') }}" class="btn btn-primary"> Create Prescription </a>
+    <hr>
+    <h3> Prescriptions </h3>
+    {% for eps in prescriptions %}
+        <h2> Patient: {{ eps["patient"] }} </h2>
+        <span class="badge badge-primary"> Date: {{ eps["date"] }}</span>
+        <span class="badge badge-primary"> Medication: {{ eps["name"] }}</span>
+        <span class="badge badge-primary"> Dosage: {{ eps["dosage"] }}</span>
+        <span class="badge badge-primary"> Frequency: {{ eps["frequency"] }}</span>
+   {% if eps["isPaid"] == 1: %}
+            <span class="badge badge-success"> Paid: Yes </span>
+   {% else: %}
+            <span class="badge badge-danger"> Paid: No </span>
+   {% endif %}     
+   <p> NOTES: {{ eps["notes"] }} </p>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,32 @@
+
+.login-btn {
+    justify-content: center;
+    flex-direction: row;
+    display: flex;
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    padding: 5px;
+    border-radius: 10px;
+}
+.btn-text {
+    padding: 5px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(85, 85, 85);
+}
+
+.navbar {
+  margin-bottom: 30px;
+}
+
+.fa-trash {
+  color: red;
+  padding: 5px;
+}
+
+.fa-download {
+  color: #008080;
+  padding: 5px;
+}

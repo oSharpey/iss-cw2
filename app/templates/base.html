@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://kit.fontawesome.com/211f74d1fd.js" crossorigin="anonymous"></script>    
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('index')}}">St John's Clinic</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                    {% if "admin" in roles or "finance" in roles %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/fincare">FinCare</a>
+                    </li>
+                    {% endif %}
+
+                    {% if "admin" in roles or "patient" in roles %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/careconnect">CareConnect</a>
+                    </li>
+                    {% endif %}
+
+                    {% if "admin" in roles or "doctor" in roles %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/medrecords">MedRecords</a>
+                    </li>   
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/eps">Electronic Prescription</a>
+                    </li>
+                    {% endif %}
+
+                    {% if "admin" in roles or "doctor" in roles or "external" in roles %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/medicloud">MediCloud</a>
+                    </li>
+                    {% endif %}
+            </ul>
+         </div>
+            
+         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav"> 
+                    {% if not session %}
+                    <li class="nav-item active">
+                        <a class="login-btn" href="/login">
+                            <img id="google" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1024px-Google_%22G%22_logo.svg.png"
+                                alt="Google"
+                                style="width:20px;height:20px;"> 
+                            <div class="btn-text">
+                                Login With Google
+                            </div>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item active">
+                        <a class="login-btn" href="/logout">
+                         <img id="google" src="https://cdn1.iconfinder.com/data/icons/heroicons-ui/24/logout-512.png"
+                            alt="Google"
+                            style="width:20px;height:20px;"> 
+                        <div class="btn-text">
+                            Logout
+                        </div>
+                    </a>
+                    </li>
+                    {% endif %}
+            </ul>
+
+       </div>
+    </nav>
+    <div class="container">
+        {% block content %} {% endblock %}
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        {% if session %}
+        <h1>Welcome {{session["given_name"]}}!</h1>
+        <h3> You have access to the following systems: </h3>
+        {% else %}
+        <h1 id="profileDropDown">Please Login </h1>
+        {% endif %}
+
+
+        <ul>
+        {% if "admin" in roles or "finance" in roles %}
+            <li>FinCare</li>
+        {% endif %}
+
+        {% if "admin" in roles or "patient" in roles %}
+            <li>CareConnect</li>
+        {% endif %}
+
+        {% if "admin" in roles or "doctor" in roles %}
+            <li>MedRecords</li>
+            <li>Electronic Prescription Service</li>
+        {% endif %}
+
+        {% if "admin" in roles or "doctor" in roles or "external" in roles %}
+            <li>MediCloud</li>
+        {% endif %}
+        </ul>
+
+{% endblock %}

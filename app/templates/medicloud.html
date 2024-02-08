@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+   <h1>{% block title %} Welcome to MediCloud! {% endblock %}</h1>
+    <hr>
+    <body>
+    <h1>File Upload</h1>
+       <p class="font-italic text-muted"> All files you upload are encryted on our servers and can only be accessed by you and your collaborators. </p>
+       <form action = "{{ url_for('upload_file') }}" method = "POST" 
+         enctype = "multipart/form-data">
+         <input type = "file" name = "file" />
+         <input type = "submit" value="Upload" class="btn btn-info"/> 
+      </form>
+    <hr>
+    <h2>Collaborative Files</h2>
+    
+    <div class="container">
+    {% for file in files %}
+        <div class="row justify-content-start">
+            <div class="col-3">
+                <img width="32" height="32" src="https://img.icons8.com/parakeet-line/64/document.png" alt="document"/>
+                <span>{{ file }}</span>
+            </div>
+            <div class="col-3">
+                <a href="{{ url_for('download_file', filename=file) }}" class="padding-right:5px"><i class="fa-solid fa-download padding-right:2px"></i></a>
+
+                <a href="{{ url_for('delete_file', filename=file) }}"><i class="fa-solid fa-trash padding-left:2px"></i></a>
+            </div>
+        </div>
+
+
+        <!-- <div>
+        <img width="32" height="32" src="https://img.icons8.com/pastel-glyph/64/document--v3.png" alt="document--v3"/>
+        <span>{{ file }}</span>
+        <a href="{{ url_for('delete_file', filename=file) }}"><i class="fa-solid fa-download"></i></a>
+        <a href="{{ url_for('download_file', filename=file) }}"><i class="fa-solid fa-trash"></i></a>
+        </div> -->
+    {% endfor %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+  </body>
+</html>{% endblock %}

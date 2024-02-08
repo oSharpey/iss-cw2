@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+   <h1>{% block title %} Welcome to CareConnect! {% endblock %}</h1>
+    <hr>
+    <a href="{{ url_for('schedule') }}" class="btn btn-primary"> Schedule Appointment </a>
+    <hr>
+    <h3> Health Record </h3>
+    <ul>
+        <li> Name: {{ record["name"] }} </li>
+        <li> Date Of Birth: {{ record["dob"] }} </li>
+        <li> Blood Type: {{ record["bloodtype"] }} </li>
+        <li> Notes: {{ record["notes"] }} </li>
+    </ul>
+    <hr>
+    <h3 class='font-weight-bold font-italic'> Appointments </h3>
+    {% for appointment in appointments %}
+        <h2> Appointment with {{ appointment["doctor"] }} </h2>
+        <span class="badge badge-primary"> {{ appointment["date"] }} @ {{ appointment["time"] }} </span>
+        <p> {{ appointment["notes"] }} </p>
+    {% endfor %}
+    <hr>
+     <h3 class='font-weight-bold font-italic'> Prescriptions </h3>
+    {% for eps in prescriptions %}
+        <div>
+       <h2>
+        <span class="badge badge-primary"> Medication: {{ eps["name"] }}</span> 
+       <span class="badge badge-primary"> Dosage: {{ eps["dosage"] }}</span>
+       </h2>
+       </div>
+        <span class="badge badge-primary"> Date: {{ eps["date"] }}</span>
+        <span class="badge badge-primary"> Frequency: {{ eps["frequency"] }}</span>
+   {% if eps["isPaid"] == 1: %}
+            <span class="badge badge-success"> Paid: Yes </span>
+   {% else: %}
+            <span class="badge badge-danger"> Paid: No </span>
+            <form action="{{ url_for('pay', id=eps['id']) }}" method="post">
+                <button type="submit" class="btn btn-primary"> Pay </button>
+            </form>
+   {% endif %}     
+            <p> NOTES: {{ eps["notes"] }} </p>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>    
+ 
+<h1>{% block title %} Create Prescription {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="patient">Patient</label>
+        <select name="patient" class="form-select">
+            <option selected>Choose...</option>
+            {% for patient in patients %}
+                <option value="{{ patient['name'] }}">{{ patient['name'] }}</option>
+            {% endfor %}
+            </select>
+    </div>
+    <!--
+    <div class="form-group">
+        <label for="doctor">Doctor</label>
+        <select name="doctor" class="form-select">
+            <option selected>Choose...</option>
+            <option value="Dr. Smith">Dr. Smith</option>
+            <option value="Dr. Johnson">Dr. Johnson</option>
+            <option value="Dr. Williams">Dr. Williams</option>
+            <option value="Dr. Brown">Dr. Brown</option>
+        </select>
+    </div>
+    -->
+    <div class="form-group">
+        <label for="name">Medication Name</label>
+        <input type="text" name="name"
+               placeholder="Medication" class="form-control"
+               value="{{ request.form['name'] }}"></input>
+    </div>
+
+     <div class="form-group">
+        <label for="dosage">Dosage</label>
+        <input type="text" name="dosage"
+               placeholder="Dosage" class="form-control"
+               value="{{ request.form['dosage'] }}"></input>
+    </div>
+     <div class="form-group">
+        <label for="freq">Frequency</label>
+        <input type="text" name="freq"
+               placeholder="Frequency" class="form-control"
+               value="{{ request.form['freq'] }}"></input>
+    </div>
+     <div class="form-group">
+        <label for="notes">Notes</label>
+        <textarea name="notes" placeholder="Notes"
+                  class="form-control">{{ request.form['notes'] }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+{% endblock %}
