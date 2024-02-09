@@ -42,8 +42,8 @@ load_dotenv()
 ## This has been simulated using the free tier which provides key value pair storage (it also provides a KMS but that is in the enterprise version)
 ## In a real production app, the KMS would be a paid service like AWS KMS or Azure Key Vault to provide better salability and control over the key management cycle
 
-## The database used to store all data is encrypted at rst using SQLCipher
-## SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption (CBC) of database files
+## The database used to store all data is encrypted at rest using SQLCipher
+## SQLCipher is an open source extension to SQLite that provides 256-bit AES encryption (CBC) of database files
 ## The passphrase SQLCiphers uses to generate the key is stored in the environment variables which similates the KMS
 ## In a real production app, the passphrase would be stored in the KMS and retrieved at runtime
 
@@ -395,7 +395,7 @@ def encrypt_file(file):
     nonce = get_random_bytes(IV_LENGTH)
     key = get_secret_key(passphrase, salt)
 
-    kms_stored_secret = salt.hex() + ":" + nonce.hex() + ":" + key.hex()
+    kms_stored_secret = nonce.hex() + ":" + key.hex()
     
     client.secrets.kv.v2.create_or_update_secret(path=file.filename,secret=dict(password=kms_stored_secret))
     
@@ -407,8 +407,7 @@ def encrypt_file(file):
 
 def decrypt_file(filename):
     kms_stored_secret = client.secrets.kv.v2.read_secret_version(path=filename)
-    salt, nonce, key = kms_stored_secret["data"]["data"]["password"].split(":")
-    salt = unhexlify(salt)
+    nonce, key = kms_stored_secret["data"]["data"]["password"].split(":")
     nonce = unhexlify(nonce)
     key = unhexlify(key)
     

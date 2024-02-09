@@ -30,7 +30,7 @@ def encrypt_file(file, filename):
     nonce = get_random_bytes(IV_LENGTH)
     key = get_secret_key(passphrase, salt)
 
-    kms_stored_secret = salt.hex() + ":" + nonce.hex() + ":" + key.hex()
+    kms_stored_secret = nonce.hex() + ":" + key.hex()
     
     client.secrets.kv.v2.create_or_update_secret(path=filename,secret=dict(password=kms_stored_secret))
     
@@ -42,8 +42,7 @@ def encrypt_file(file, filename):
 
 def decrypt_file(filename):
     kms_stored_secret = client.secrets.kv.v2.read_secret_version(path=filename, raise_on_deleted_version=True)
-    salt, nonce, key = kms_stored_secret["data"]["data"]["password"].split(":")
-    salt = unhexlify(salt)
+    nonce, key = kms_stored_secret["data"]["data"]["password"].split(":")
     nonce = unhexlify(nonce)
     key = unhexlify(key)
    
