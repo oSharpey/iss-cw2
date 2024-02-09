@@ -69,7 +69,7 @@ client = hvac.Client(
 
 
 app = Flask(__name__)
-app.secret_key = "secret key"
+app.secret_key = os.getenv("APP_SECRET")
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config["UPLOAD_FOLDER"] = "uploads"
 app.config["TMP_FOLDER"] = "tmp"
@@ -77,6 +77,7 @@ app.config['UPLOAD_EXTENSIONS'] = ['.pdf', '.txt', '.odf', '.doc', '.docx', '.pn
 app.config["SESSION_COOKIE_NAME"] = "google-login-session"
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_COOKIE_SECURE"] = True
 Session(app)
 
 IV_LENGTH = 12
