@@ -59,32 +59,34 @@ def decrypt_file(filename):
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python3 key_compromised.py <filename>")
+    if len(sys.argv) < 2:
+        print("Usage: python3 key_compromised.py <filename> <filename2> ...")
         sys.exit(1)
 
-    filepath = sys.argv[1]
-    filename = os.path.basename(filepath)
 
-    if not os.path.exists(filepath):
-        print(f"File {filename} does not exist")
-        sys.exit(1)
+    for i in range(1, len(sys.argv)):
+        filepath = sys.argv[i]
+        filename = os.path.basename(filepath)
 
-    file = decrypt_file(filename)
-    print("[+] File decrypted successfully")
-    
-    client.secrets.kv.v2.delete_metadata_and_all_versions(path=filename)
-    print("[+] Secret deleted successfully")
+        if not os.path.exists(filepath):
+            print(f"File {filename} does not exist")
+            sys.exit(1)
 
-    enc_file = encrypt_file(file, filename)
+        file = decrypt_file(filename)
+        print("[+] File decrypted successfully")
+     
+        client.secrets.kv.v2.delete_metadata_and_all_versions(path=filename)
+        print("[+] Secret deleted successfully")
 
-    with open (os.path.join(UPLOAD_FOLDER, filename), "wb") as file:
-        file.write(enc_file)
+        enc_file = encrypt_file(file, filename)
 
-    print("[+] File encrypted successfully")
-    print("[+] New secret stored successfully")
-    
-    print(f"\n\n[+] Key for file {filename} has been rotated successfully\n\n")
+        with open (os.path.join(UPLOAD_FOLDER, filename), "wb") as file:
+         file.write(enc_file)
+
+        print("[+] File encrypted successfully")
+        print("[+] New secret stored successfully")
+     
+        print(f"\n\n[+] Key for file {filename} has been rotated successfully\n\n")
      
 
 
