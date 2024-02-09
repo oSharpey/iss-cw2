@@ -22,13 +22,14 @@ load_dotenv()
 ########## ASSUMPTIONS & CONTEXT ##########
 ###########################################
 
-## - In a real production app, each system would be running as separete apps on differnet subdomains (careconnect.example.com, medicloud.example.com, etc)
-## - For this demo and simulation, we will just have them as different routes
+## - In a real production app, each system would be running as separate apps on different subdomains (careconnect.example.com, medicloud.example.com, etc)
+## - For this demo and simulation, we will have them as different routes
 ## - This is to simulate the SSO requirement
-## - Having the on differnt routes instead of subdomains means i dont need to configure multiple docker containers and a reverse proxy for the system
+## - Having them on different routes instead of subdomains means I do not need to configure multiple docker containers and a reverse proxy for the system
 ## - This is just a demo, so it is fine to have them on different routes
-## - In a prod app the user would still be authenticated using the same set of google credentials, fufilling the SSO requirement
+## - In a prod app the user would still be authenticated using the same set of Google credentials, fulfilling the SSO requirement
 ## - The RBAC simulated in this demo would be implemented using a production RBAC system like Keycloak with Redis or Auth0
+## - I would have used auth0 but I dont really want to pay for it
 
 ## The following roles are simulated in this demo:
 ## - admin
@@ -39,27 +40,31 @@ load_dotenv()
 
 ## The KMS used in this simulation is Hashicorp Vault
 ## Hashicorp vault is used to store the encryption keys for each file in the cloud system
-## This has been simulated using the free tier which provides key value pair storage (it also provides a KMS but that is in the enterprise version)
-## In a real production app, the KMS would be a paid service like AWS KMS or Azure Key Vault to provide better salability and control over the key management cycle
+## This has been simulated using the free tier which provides key-value pair storage (it also provides a KMS but that is in the enterprise version)
+## In a real production app, the KMS would be a paid service like AWS KMS or Azure Key Vault to provide better scalability and control over the key management cycle
+## A production KMS will also have features like automatic key rotation, key generation etc (this is shown in the sequence diagrams provided)
 
 ## The database used to store all data is encrypted at rest using SQLCipher
-## SQLCipher is an open source extension to SQLite that provides 256-bit AES encryption (CBC) of database files
-## The passphrase SQLCiphers uses to generate the key is stored in the environment variables which similates the KMS
+## SQLCipher is an open-source extension to SQLite that provides 256-bit AES encryption (CBC) of database files
+## The passphrase SQLCiphers uses to generate the key is stored in the environment variables which simulates the KMS
 ## In a real production app, the passphrase would be stored in the KMS and retrieved at runtime
+## AES CBC isn't the most secure mode to use (I would rather use GCM) however the convenience of the package makes it worth using. 
+## Plus SQLCipher implements a HMAC to check if the ciphertext or IV have been tampered with. (https://www.zetetic.net/sqlcipher/design/) - this works similarly to the authentication in AES-GCM
 
 ## This implementation uses a single database file to store all the data
 ## In a real production app, there would be multiple databases each being encrypted with its own key
 ## For example, the user health records would be in a different database file from the financial records
 ## This is to provide better isolation between user records and sensitive financial data
 
-## This implementation uses dummy self signed certificates provided by flask for TLS/SSL
-## In a real production app, we would use a certificate from a CA like LetsEncrypt or Comodo
+## This implementation uses certificates provided by letsencrypt to enable TLSv1.3
+## The diagram for how the TLS handshake is handled can be found in the PDF provided
+## A production version of the app is running on https://iss.oscarsharpe.me
 
-## Files that are uploaded to the medicloud system are encrypted using AES-GCM
-## In this simulation keys are generated using PBKDF2 and stored in hashicorp vault along with the salt and nonce
+## Files that are uploaded to the medicloud system are encrypted using AES-256-GCM
+## In this simulation keys are generated using PBKDF2-HMAC-SHA512 and stored in hashicorp vault along with the 96 bit nonce
 ## The key used to encrypt the file is stored in the KMS (Hashicorp Vault)
 ## The key is retrieved at runtime and used to decrypt the file
-
+## NIST recommends the use of the 96 bit nonce in SP-800-38D
 
 
 client = hvac.Client(
