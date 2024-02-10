@@ -29,6 +29,8 @@ sudo dnf update --refresh
 sudo dnf install sqlcipher sqlcipher-devel
 ```
 
+
+
 ### Create a Python virtual environment and install dependencies 
 - Created on python 3.12.3
 - Create a python venv to install dependencies
@@ -43,7 +45,7 @@ sqlcipher datbase_enc.db
 sqlite> .read schema.sql
 ```
 
-### Set up the Hashicorp vault server
+### Set up the Hashicorp vault container
 - Pull the docker image from dockerhub
 ```
 docker pull hashicorp/vault
@@ -61,5 +63,19 @@ OAUTH_CLIENT_ID=<client id provided by google when you create an oauth client>
 OAUTH_CLIENT_SECRET=<client secret provided by google when you create an oauth client>
 DBPASS=<database passphrase used to decrypt database, by default this is 'UntitledEntailGradedCrumb' set in schema.sql (you can change this)>
 APP_SECRET=<random string used to sign session cookies>
+```
+
+### Create `uploads/` and `tmp/` directories in iss-cw2/app
+```bash
+mkdir uploads
+mkdir tmp
+```
+
+## ⇁ Running the app
+- There are two main ways to run the app, through flask (for development) or gunicorn (for production)
+``` bash
+flask run --cert=adhoc
+# or
+gunicorn --bind 0.0.0.0:8000 --workers=3 wsgi:app
 ```
 
