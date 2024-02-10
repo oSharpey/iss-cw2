@@ -44,7 +44,6 @@ sqlite> .read schema.sql
 ```
 
 ### Set up the Hashicorp vault server
-#### Option 1:
 - Pull the docker image from dockerhub
 ```
 docker pull hashicorp/vault
@@ -54,4 +53,13 @@ docker pull hashicorp/vault
 docker run --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' hashicorp/vault
 ```
 
+### Set up your `.env` file
+The app expects the values below in the `.env` file
+```
+HASHI_TOKEN=<token you set when starting vault server>
+OAUTH_CLIENT_ID=<client id provided by google when you create an oauth client>
+OAUTH_CLIENT_SECRET=<client secret provided by google when you create an oauth client>
+DBPASS=<database passphrase used to decrypt database, by default this is 'UntitledEntailGradedCrumb' set in schema.sql (you can change this)>
+APP_SECRET=<random string used to sign session cookies>
+```
 
