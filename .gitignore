@@ -3,3 +3,4 @@ app/issenv
 app/__pycache__
 app/flask_session
 app/uploads/*
+app/database_enc.db
