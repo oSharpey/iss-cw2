@@ -11,6 +11,7 @@ This is a demo web app meant to demonstrate cryptographic functions and SSO thro
 
 ---
 </div>
+
 [![](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 
 ## ⇁ Installation 
