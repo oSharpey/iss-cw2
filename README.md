@@ -1,7 +1,9 @@
 <div align="center">
   
 # ⇁ ISS CW2 - St John's Clinic Demo Web App
-This is a demo web app meant to demonstrate cryptographic functions and SSO through Google OpenID Connect
+This is a demo web app meant to demonstrate cryptographic functions and SSO (Google OpenID Connect)
+All assumptions and context can be found in `app.py`
+Sequence diagrams for the systems can be found in `ISS_CW2.pdf`
 
 [![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/index.html)
 [![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/en/3.0.x/)
