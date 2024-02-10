@@ -43,6 +43,7 @@ load_dotenv()
 ## This has been simulated using the free tier which provides key-value pair storage (it also provides a KMS but that is in the enterprise version)
 ## In a real production app, the KMS would be a paid service like AWS KMS or Azure Key Vault to provide better scalability and control over the key management cycle
 ## A production KMS will also have features like automatic key rotation, key generation etc (this is shown in the sequence diagrams provided)
+## Hashicorp vault is currently running over HTTP. As this is running locally for now its not too much of an issue however in production you would want to generate certs for this and run it over HTTPS
 
 ## The database used to store all data is encrypted at rest using SQLCipher
 ## SQLCipher is an open-source extension to SQLite that provides 256-bit AES encryption (CBC) of database files
