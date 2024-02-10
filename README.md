@@ -16,4 +16,33 @@ This is a demo web app meant to demonstrate cryptographic functions and SSO thro
 
 ## ⇁ Installation 
 
-### Creating python virtual environment
+### Install SqlCipher
+Ubuntu/Debian:
+```bash
+$ sudo apt update && sudo apt upgrade
+$ sudo apt install sqlcipher libsqlcipher-dev libsqlcipher0
+```
+
+Fedora/RedHat based:
+```bash
+$ sudo dnf update --refresh
+$ sudo dnf install sqlcipher sqlcipher-devel
+```
+
+### Create a Python virtual environment and install dependencies 
+- Created on python 3.12.3
+- Create a python venv to install dependencies
+```
+python3 -m venv venv
+pip3 install -r requirements.txt 
+```
+
+### Set up DB
+- DB file provided in the repo will not work
+```
+rm database_enc.db
+sqlcipher datbase_enc.db
+
+sqlite> .read schema.sql
+```
+
