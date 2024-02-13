@@ -3,7 +3,7 @@ from binascii import unhexlify
 import os
 import shutil 
 import tempfile
-from flask import Flask, render_template, redirect, url_for, session, request, flash, send_file, current_app
+from flask import Flask, render_template, redirect, url_for, session, request, flash, send_file
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from functools import wraps
@@ -22,17 +22,18 @@ load_dotenv()
 ########## ASSUMPTIONS & CONTEXT ##########
 ###########################################
 
-## - In a real production app, each system would be running as separate apps on different subdomains (careconnect.example.com, medicloud.example.com, etc)
-## - For this demo and simulation, we will have them as different routes
-## - This is to simulate the SSO requirement
-## - Having them on different routes instead of subdomains means I do not need to configure multiple docker containers and a reverse proxy for the system
-## - This is just a demo, so it is fine to have them on different routes
-## - In a prod app the user would still be authenticated using the same set of Google credentials, fulfilling the SSO requirement
-## - The RBAC simulated in this demo would be implemented using a production RBAC system like Keycloak with Redis or Auth0
-## - I would have used auth0 but I dont really want to pay for it
+## In a real production app, each system would be running as separate apps on different subdomains (careconnect.example.com, medicloud.example.com, etc)
+## For this demo and simulation, we will have them as different routes
+## This is to simulate the SSO requirement
+## Having them on different routes instead of subdomains means I do not need to configure multiple docker containers and a reverse proxy for the system
+## This is just a demo, so it is fine to have them on different routes
+## In a prod app the user would still be authenticated using the same set of Google credentials, fulfilling the SSO requirement
+## The RBAC simulated in this demo would be implemented using a production RBAC system like Keycloak with Redis or Auth0
+## I would have used auth0 but I dont really want to pay for it
+## Auth0 would also allow me to implement robust MFA using google authenticator or other TOTP apps
 
 ## The following roles are simulated in this demo:
-## - admin
+## - admin (can access all systems, only set up with my personal email)
 ## - finance
 ## - doctor
 ## - patient
@@ -56,6 +57,10 @@ load_dotenv()
 ## In a real production app, there would be multiple databases each being encrypted with its own key
 ## For example, the user health records would be in a different database file from the financial records
 ## This is to provide better isolation between user records and sensitive financial data
+## All finanical records are stored with anonymised userIDs as it is not necessary to store the user's health information in the financial records
+## This is to comply with the GDPR and other data protection laws
+## The NHS has a code of conduct in place for the use and storage of patient data (https://transform.england.nhs.uk/information-governance/guidance/records-management-code/)
+
 
 ## This implementation uses certificates provided by letsencrypt to enable TLSv1.3
 ## The diagram for how the TLS handshake is handled can be found in the PDF provided
@@ -68,13 +73,15 @@ load_dotenv()
 ## NIST recommends the use of the 96 bit nonce in SP-800-38D
 ## These files are stored in the uploads folder and the doctor and external roles can access them
 ## I would like to extend this by allowing for the files to be restricted to certain users, this can be done by storing the userids along with the filename in the database
-## Then you can restrict access to the file by checking if the user has access to the file in the database
+## Then you can restrict access to the file by checking if the user has access to the file in the database and blocking access in the API routes depening on this
+
 
 ## I have tried to follow the reccomenedations made in NIST SP-800-57 for key management
 ## The publication reccomends that keys are rotated at least every 3 years
 ## This can be implemented either automatically in a KMS system like AWS KMS or Azure Key Vault (usually every 90 days)
 ## Or by setting a crom job to run at a certain time to run the data_key_rotation script provided.
 ## The data_key_rotation script will generate a new key, re-encrypt the file with the new key and store the new key in the KMS
+## The old key will be deleted from the KMS
 
 
 client = hvac.Client(
