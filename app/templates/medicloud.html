@@ -15,7 +15,8 @@
     <hr>
     <body>
     <h1>File Upload</h1>
-       <p class="font-italic text-muted"> All files you upload are encryted on our servers and can only be accessed by you and your collaborators. </p>
+       <p class="font-italic text-muted"> All files you upload are encryted on our servers and can only be accessed by you and your collaborators.
+       Supported filetypes: '.pdf', '.txt', '.odf', '.doc', '.docx', '.png', '.jpg', '.jpeg' </p>
        <form action = "{{ url_for('upload_file') }}" method = "POST" 
          enctype = "multipart/form-data">
          <input type = "file" name = "file" />

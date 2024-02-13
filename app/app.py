@@ -66,6 +66,15 @@ load_dotenv()
 ## The key used to encrypt the file is stored in the KMS (Hashicorp Vault)
 ## The key is retrieved at runtime and used to decrypt the file
 ## NIST recommends the use of the 96 bit nonce in SP-800-38D
+## These files are stored in the uploads folder and the doctor and external roles can access them
+## I would like to extend this by allowing for the files to be restricted to certain users, this can be done by storing the userids along with the filename in the database
+## Then you can restrict access to the file by checking if the user has access to the file in the database
+
+## I have tried to follow the reccomenedations made in NIST SP-800-57 for key management
+## The publication reccomends that keys are rotated at least every 3 years
+## This can be implemented either automatically in a KMS system like AWS KMS or Azure Key Vault (usually every 90 days)
+## Or by setting a crom job to run at a certain time to run the data_key_rotation script provided.
+## The data_key_rotation script will generate a new key, re-encrypt the file with the new key and store the new key in the KMS
 
 
 client = hvac.Client(
